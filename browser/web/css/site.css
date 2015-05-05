@@ -89,3 +89,19 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+.search_result_item {
+    color: #000000;
+    background: #cccccc;
+    border-left: 3px solid #808080;
+    padding: 10px 20px;
+    margin: 15px 0 0 0;
+}
+
+.search_result_item_project_name {
+    color: #00f;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0px;
+    margin: 0px;
+}

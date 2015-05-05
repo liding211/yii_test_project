@@ -49,7 +49,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->actionProject(1);
     }
 
     public function actionLogin()
@@ -75,22 +75,18 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionContact()
+    public function actionProject($id)
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
+        return $this->render('project');
     }
 
-    public function actionAbout()
+    public function actionUser($id)
     {
-        return $this->render('about');
+        return $this->render('user');
+    }
+    
+    public function actionSearch($query)
+    {
+        return $this->render('search');
     }
 }
