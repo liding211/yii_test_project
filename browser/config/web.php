@@ -7,6 +7,20 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            // Disable index.php
+            'showScriptName' => false,
+            // Disable r= routes
+            'enablePrettyUrl' => true,
+            'rules' => array(
+                    '<_a:(user|project)>/<id:\w+>' => 'site/<_a>',
+                    '<action:\w+>' => 'site/<action>',
+            ),
+        ],
+        'github_client' => [
+            'class' => 'Github\Client'
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '_imGlV1iDL83ijg68I_-xFGa6xACxllM',
