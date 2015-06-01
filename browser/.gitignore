@@ -1,3 +1,6 @@
+# real config files
+/config/
+
 # phpstorm project files
 .idea
 
