@@ -10,7 +10,7 @@
 Thumbs.db
 
 # config files
-# browser/config/
+browser/config/
 
 # composer vendor dir
 browser/vendor/
