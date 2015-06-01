@@ -1,1 +1,25 @@
+# all specific files
+.*
+!.gitignore
+!browser/.htaccess
+
+# netbeans project files
 /nbproject/
+
+# windows thumbnail cache
+Thumbs.db
+
+# config files
+# browser/config/
+
+# composer vendor dir
+browser/vendor/
+
+# composer itself is not needed
+browser/composer.phar
+
+# phpunit itself is not needed
+browser/phpunit.phar
+
+# local phpunit config
+browser/phpunit.xml
