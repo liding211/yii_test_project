@@ -1,5 +1,6 @@
 <?php
-/* @var $this yii\web\View */
+use yii\helpers\Html;
+
 $this->title = 'Main';
 ?>
 <div class="site-index">
@@ -7,21 +8,29 @@ $this->title = 'Main';
         <div class="row">
             <div class="col-lg-1"></div>
             <div class="col-lg-6">
-                <h2>Yiisoft/yii</h2>
-
-                <p>Description: Yii PHP Framework</p>
-                <p>Watchers: 2483</p>
-                <p>Forks: 17</p>
-                <p>Open issues: 32</p>
-                <p>Home page: www.yiiframework.com</p>
-                <p>GitHub repo: ...</p>
-                <p>Created: 2010-02-28T16:23:36</p>
+                <h2><?= $project['full_name']; ?></h2>
+                <p>Description: <?= $project['description']; ?></p>
+                <p>Watchers: <?= $project['watchers_count']; ?></p>
+                <p>Forks: <?= $project['forks']; ?></p>
+                <p>Open issues: <?= $project['open_issues']; ?></p>
+                <p>Home page: <?= Html::a($project['homepage'],$project['homepage']); ?></p>
+                <p>GitHub repo: <?= Html::a($project['html_url'],$project['html_url']); ?></p>
+                <p>Created: <?= $project['created_at']; ?></p>
             </div>
             <div class="col-lg-4">
                 <h2>Contributors</h2>
-
-                <p>Samdark (Like)</p>
-                <p>Roomy (UnLike)</p>
+                <table>
+                    <?php foreach($contributors as $contributor): ?>
+                        <tr>
+                            <td>
+                                <?= Html::a($contributor['login'],['user', 'username' => $contributor['login']]); ?>
+                            </td>
+                            <td>
+                                [Like] / [Unlike]
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
             </div>
             <div class="col-lg-1"></div>
         </div>

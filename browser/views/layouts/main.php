@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -35,6 +36,15 @@ AppAsset::register($this);
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
+                    '<li>
+                        <form id="searchform" name="searchform" method="post" action="' . Url::to(['site/search']) . '">
+                          <div class="fieldcontainer">
+                            <input type="text" name="query" class="searchfield" placeholder="Search project..." tabindex="1">
+                            <input type="submit" name="search" id="searchbutton" value="">
+                            <input type="hidden" name="_csrf" value="ODYzbHdaem9iZHZcGRc9HEJYXxg/Cx8eFVpbIDltK1pdXXEnMSlIHg==">
+                          </div>
+                        </form>
+                    </li>',
                     Yii::$app->user->isGuest ?
                         ['label' => 'Login', 'url' => ['/site/login']] :
                         ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',

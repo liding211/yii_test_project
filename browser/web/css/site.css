@@ -105,3 +105,51 @@ a.desc:after {
     padding: 0px;
     margin: 0px;
 }
+
+/* search field in nav block */
+#searchform {
+  display: block;
+  margin-top: 15px;
+}
+
+.fieldcontainer {
+  display: block;
+  position: relative;
+  margin: auto;
+}
+
+.searchfield {
+  display: block;
+  padding-right: 43px;
+  background-color: #fff;
+  font-size: 0.9em;
+  color: #ccc;
+  border: 1px solid #c8c8c8;
+}
+
+.searchfield:focus {
+  width: 100%;
+  color: #666;
+}
+
+#searchbutton {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  height: 12px;
+  width: 12px;
+  border: 0;
+  cursor: pointer;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  background: transparent url(http://3.bp.blogspot.com/-hnSgETdqsEQ/Un5yBwokY-I/AAAAAAAAFEw/NmpcD4YdN44/s1600/search+icon.png) top left no-repeat;
+  background-size: contain;
+
+}
+#searchbutton:hover, #searchbutton:focus {
+    filter: alpha(opacity=90);
+    opacity: 0.9; 
+}
+.searchfield:focus + #searchbutton {
+  right: 10px; /* adjust button position as the field expands */
+}
