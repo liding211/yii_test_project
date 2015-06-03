@@ -33,10 +33,9 @@ AppAsset::register($this);
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => [
-                    '<li>
+            
+            $navItems=[
+                '<li>
                         <form id="searchform" name="searchform" method="post" action="' . Url::to(['site/search']) . '">
                           <div class="fieldcontainer">
                             <input type="text" name="query" class="searchfield" placeholder="Search project..." tabindex="1">
@@ -44,14 +43,38 @@ AppAsset::register($this);
                             <input type="hidden" name="_csrf" value="ODYzbHdaem9iZHZcGRc9HEJYXxg/Cx8eFVpbIDltK1pdXXEnMSlIHg==">
                           </div>
                         </form>
-                    </li>',
-                    Yii::$app->user->isGuest ?
-                        ['label' => 'Login', 'url' => ['/site/login']] :
-                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                            'url' => ['/site/logout'],
-                            'linkOptions' => ['data-method' => 'post']],
-                ],
+                    </li>'
+            ];
+            if (Yii::$app->user->isGuest) {
+                array_push(
+                    $navItems, 
+                    ['label' => 'Sign In', 'url' => ['/site/login']],
+                    ['label' => 'Sign Up', 'url' => ['/site/signup']]
+                );
+            } else {
+                array_push(
+                    $navItems,
+                    ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post']]
+                );
+            }
+            echo Nav::widget([
+                'options' => ['class' => 'navbar-nav navbar-right'],
+                'items' => $navItems,
             ]);
+            
+//            echo Nav::widget([
+//                'options' => ['class' => 'navbar-nav navbar-right'],
+//                'items' => [
+//                    ,
+//                    Yii::$app->user->isGuest ?
+//                        ['label' => 'Login', 'url' => ['/site/login']] :
+//                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+//                            'url' => ['/site/logout'],
+//                            'linkOptions' => ['data-method' => 'post']],
+//                ],
+//            ]);
             NavBar::end();
         ?>
 
