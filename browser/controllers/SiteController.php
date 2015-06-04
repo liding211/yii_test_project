@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\SignupForm;
+use app\models\Like;
+use yii\web\Response;
 
 class SiteController extends Controller
 {
@@ -105,8 +107,17 @@ class SiteController extends Controller
         Yii::$app->github_client->authenticate(GITHUB_API_LOGIN, GITHUB_API_PASSWORD);
         $project_info = Yii::$app->github_client->api('repo')->
             show($username, $repository);
-        $project_contributors = Yii::$app->github_client->api('repo')->
+        $contributors = (array) Yii::$app->github_client->api('repo')->
             contributors($username, $repository);
+        
+        foreach($contributors as $key => $contributor){
+            $project_contributors[$key] = $contributor;
+            $project_contributors[$key]['is_liked'] = Like::isLiked(
+                Like::OBJECT_TYPE_GITHUB_USER,
+                $contributor['id']
+            );
+        }
+        
         return $this->render('project', array(
             'project' => $project_info, 'contributors' => $project_contributors
         ));
@@ -119,10 +130,31 @@ class SiteController extends Controller
         $user = Yii::$app->github_client->api('user')->show($username);
         return $this->render('user', array('user' => $user));
     }
+
+    public function actionConvert_like()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if(!Yii::$app->user->isGuest && Yii::$app->request->isAjax){
+            $post = Yii::$app->request->post();
+            $object_type = $post['object_type'];
+            $object_id = $post['object_id'];
+            if(Like::isLiked($object_type, $object_id)){
+                if(Like::deleteLike($object_type, $object_id)){
+                    return '[Like]';
+                }
+            } else {
+                if(Like::addLike($object_type, $object_id)){
+                    return '[UnLike]';
+                }
+            }
+        }
+        return false;
+    }
     
     public function actionSearch()
     {
         $repositories = array();
+        $post = ['query' => ''];
         if(Yii::$app->request->post()){
             $post = Yii::$app->request->post();
             if(!empty($post['query'])){

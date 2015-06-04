@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use app\models\Like;
 
 $this->title = 'Main';
 ?>
@@ -19,14 +20,25 @@ $this->title = 'Main';
             </div>
             <div class="col-lg-4">
                 <h2>Contributors</h2>
-                <table>
+                <table width="100%">
                     <?php foreach($contributors as $contributor): ?>
                         <tr>
-                            <td>
+                            <td width="80%">
                                 <?= Html::a($contributor['login'],['user', 'username' => $contributor['login']]); ?>
                             </td>
-                            <td>
-                                [Like] / [Unlike]
+                            <td width="20%">
+                                <?php if(!Yii::$app->user->isGuest): ?>
+                                    <?= Html::a(
+                                        Like::isLiked(Like::OBJECT_TYPE_GITHUB_USER, $contributor['id']) ?
+                                            '[UnLike]' : '[Like]',
+                                        ['site/convert_like'],
+                                        [
+                                            'class' => 'like_link',
+                                            'id' => Like::OBJECT_TYPE_GITHUB_USER . '_' . $contributor['id'],
+                                            'onclick' => 'return convertLike(this);',
+                                        ]
+                                    ); ?>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>

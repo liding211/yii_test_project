@@ -153,3 +153,9 @@ a.desc:after {
 .searchfield:focus + #searchbutton {
   right: 10px; /* adjust button position as the field expands */
 }
+
+/* like */
+.like_link{
+    text-decoration: none;
+    font-size: 15px;
+}

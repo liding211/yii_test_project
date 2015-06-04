@@ -40,7 +40,7 @@ AppAsset::register($this);
                           <div class="fieldcontainer">
                             <input type="text" name="query" class="searchfield" placeholder="Search project..." tabindex="1">
                             <input type="submit" name="search" id="searchbutton" value="">
-                            <input type="hidden" name="_csrf" value="ODYzbHdaem9iZHZcGRc9HEJYXxg/Cx8eFVpbIDltK1pdXXEnMSlIHg==">
+                            <input type="hidden" name="_csrf" value="' . Yii::$app->request->getCsrfToken() . '">
                           </div>
                         </form>
                     </li>'
@@ -54,9 +54,11 @@ AppAsset::register($this);
             } else {
                 array_push(
                     $navItems,
-                    ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']]
+                    [
+                        'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
+                        'url' => ['/site/logout'],
+                        'linkOptions' => ['data-method' => 'post']
+                    ]
                 );
             }
             echo Nav::widget([
@@ -64,17 +66,6 @@ AppAsset::register($this);
                 'items' => $navItems,
             ]);
             
-//            echo Nav::widget([
-//                'options' => ['class' => 'navbar-nav navbar-right'],
-//                'items' => [
-//                    ,
-//                    Yii::$app->user->isGuest ?
-//                        ['label' => 'Login', 'url' => ['/site/login']] :
-//                        ['label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-//                            'url' => ['/site/logout'],
-//                            'linkOptions' => ['data-method' => 'post']],
-//                ],
-//            ]);
             NavBar::end();
         ?>
 

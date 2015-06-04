@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use app\models\Like;
 
 /* @var $this yii\web\View */
 $this->title = "Search";
@@ -30,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td width="33%">
                             <?= Html::a( 
                                 $repo['owner']['login'], 
-                                ['user', 'id' => $repo['owner']['id']] 
+                                ['user', 'username' => $repo['owner']['login']] 
                             ); ?>
                         </td>
                     </tr>
@@ -47,7 +48,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             Forks: <?= (int) $repo['forks']; ?>
                         </td>
                         <td width="33%" align="right">
-                            <?php //Yii::$app->user->isGuest ? '':'';?> [Like]
+                            <?php if(!Yii::$app->user->isGuest): ?>
+                                <?= Html::a(
+                                    Like::isLiked(Like::OBJECT_TYPE_GITHUB_PROJECT, $repo['id']) ?
+                                        '[UnLike]' : '[Like]',
+                                    ['site/convert_like'],
+                                    [
+                                        'class' => 'like_link',
+                                        'id' => Like::OBJECT_TYPE_GITHUB_PROJECT . '_' . $repo['id'],
+                                        'onclick' => 'return convertLike(this);',
+                                    ]
+                                ); ?>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 </table>
