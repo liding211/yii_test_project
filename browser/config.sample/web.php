@@ -14,8 +14,10 @@ $config = [
             // Disable r= routes
             'enablePrettyUrl' => true,
             'rules' => array(
-                    '<_a:(user|project)>/<id:\w+>' => 'site/<_a>',
-                    '<action:\w+>' => 'site/<action>',
+                'project/<username:[a-zA-Z0-9 \-_.]+>/<repository:[a-zA-Z0-9 \-_.]+>' => 'site/project',
+                'user/<username:[a-zA-Z0-9 \-_.]+>' => 'site/user',
+                '<action:[a-zA-Z\-_.]+>' => 'site/<action>',
+                '<controller:\w+>/<action:[a-zA-Z\-_.]+>' => '<controller>/<action>',
             ),
         ],
         'github_client' => [
@@ -24,6 +26,10 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '_imGlV1iDL83ijg68I_-xFGa6xACxllM',
+            'enableCsrfValidation' => true,
+        ],
+        'response' => [
+            'class' => 'yii\web\Response',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -64,5 +70,11 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = 'yii\gii\Module';
 }
+
+@define(GITHUB_API_LOGIN,     'github_user_login'); 
+@define(GITHUB_API_PASSWORD,  'github_user_password');
+
+@define(MAIN_PAGE_PROJECT_USERNAME, 'yiisoft');
+@define(MAIN_PAGE_PROJECT_REPOSITORY, 'yii2'); 
 
 return $config;
