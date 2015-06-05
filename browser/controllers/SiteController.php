@@ -10,6 +10,9 @@ use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\Like;
 use yii\web\Response;
+use yii\helpers\Html;
+use yii\web\NotFoundHttpException;
+use Github\Exception\RuntimeException;
 
 class SiteController extends Controller
 {
@@ -104,12 +107,16 @@ class SiteController extends Controller
     public function actionProject($username, $repository)
     {
         $project_info = $project_contributors = array();
-        Yii::$app->github_client->authenticate(GITHUB_API_LOGIN, GITHUB_API_PASSWORD);
-        $project_info = Yii::$app->github_client->api('repo')->
-            show($username, $repository);
-        $contributors = (array) Yii::$app->github_client->api('repo')->
-            contributors($username, $repository);
-        
+        if($this->authToGithubApi()){
+            try{
+                $project_info = Yii::$app->github_client->api('repo')->
+                    show($username, $repository);
+                $contributors = (array) Yii::$app->github_client->api('repo')->
+                    contributors($username, $repository);
+            } catch (RuntimeException $e) {
+                throw new NotFoundHttpException();
+            }
+        }        
         foreach($contributors as $key => $contributor){
             $project_contributors[$key] = $contributor;
             $project_contributors[$key]['is_liked'] = Like::isLiked(
@@ -126,8 +133,13 @@ class SiteController extends Controller
     public function actionUser($username)
     {
         $user = array();
-        Yii::$app->github_client->authenticate(GITHUB_API_LOGIN, GITHUB_API_PASSWORD);
-        $user = Yii::$app->github_client->api('user')->show($username);
+        if($this->authToGithubApi()){
+            try{
+                $user = Yii::$app->github_client->api('user')->show($username);         
+            } catch (RuntimeException $e) {
+                throw new NotFoundHttpException();
+            }
+        }
         return $this->render('user', array('user' => $user));
     }
 
@@ -158,11 +170,30 @@ class SiteController extends Controller
         if(Yii::$app->request->post()){
             $post = Yii::$app->request->post();
             if(!empty($post['query'])){
-                Yii::$app->github_client->authenticate(GITHUB_API_LOGIN, GITHUB_API_PASSWORD);
-                $search_result = Yii::$app->github_client->api('search')->repositories( $post['query'] );
-                $repositories = $search_result['items'];
+                if($this->authToGithubApi()){
+                    try{
+                        $search_result = Yii::$app->github_client->api('search')->repositories( Html::encode($post['query']) );
+                        $repositories = $search_result['items'];
+                    } catch (RuntimeException $e){
+                        throw new NotFoundHttpException();
+                    }
+                }
             }
         }
         return $this->render('search', array('repos_list' => $repositories, 'search_query' => $post['query']));
+    }
+    
+    private function authToGithubApi()
+    {
+        static $is_authenticated = false;
+        if(!$is_authenticated){
+            try{
+                Yii::$app->github_client->authenticate(GITHUB_API_LOGIN, GITHUB_API_PASSWORD);
+                $is_authenticated = true;
+            } catch (RuntimeException $e){
+                $is_authenticated = false;
+            }
+        }
+        return $is_authenticated;
     }
 }

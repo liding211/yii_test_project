@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use app\models\Like;
 
 /* @var $this yii\web\View */
-$this->title = "Search";
+$this->title = 'Search "' . $search_query . '"';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">

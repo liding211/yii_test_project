@@ -4,7 +4,6 @@ namespace app\models;
 
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use Yii;
 
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -72,6 +71,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->password === md5($password);
     }
     
+    /**
+     * Set password
+     *
+     * @param  string  $password new password
+     */
     public function setPassword($password)
     {
         $this->password = md5($password);
